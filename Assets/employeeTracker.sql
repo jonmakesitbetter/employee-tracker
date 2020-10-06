@@ -32,13 +32,13 @@ SELECT * FROM role;
 CREATE TABLE employee(
 id INT AUTO_INCREMENT NOT NULL,
 first_name VARCHAR(30),
-last_nam VARCHAR(30),
+last_name VARCHAR(30),
 role_id INT(0),
 manager_id INT(0),
 PRIMARY KEY(id)
 );
 
-INSERT INTO employee(first_name)
-VALUES("Sterence");
+INSERT INTO employee(first_name, last_name)
+VALUES("Sterence", "Bupkiss");
 
 SELECT * FROM employee;
