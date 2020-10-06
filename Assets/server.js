@@ -44,18 +44,24 @@ connection.connect (function(err) {
            updateRole();
     } else if (answer.menu === 'Add role'){
            addRole();
-    } else (answer.menu === 'Add department'){
+    } else (answer.menu === 'Add department')
            addDepartment();
-    }
+    
 
 
       })
   }
 
   function viewEmployee() {
-          connection.query('SELECT * FROM employee', function (err, results){
+          connection.query(`SELECT first_name, last_name, title, salary
+          FROM employee
+          INNER JOIN role ON employee.role_id = role.id;`, function (err, results){
           if (err) throw err;
             console.table(results);
           }
           )}
+// function viewEmployeeDepartment() {
+
+// }
+
 
