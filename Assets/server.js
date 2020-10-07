@@ -32,15 +32,15 @@ function init() {
         "Add department",
         "Add role",
         "Update employee role",
-        ],
+      ],
     })
     .then(function (answer) {
       if (answer.menu === "View all employees") {
         viewEmployee();
       } else if (answer.menu === "View all departments") {
-        viewEmployeeDepartment();
+        viewDepartment();
       } else if (answer.menu === "View all roles") {
-        viewEmployeeRole();
+        viewRole();
       } else if (answer.menu === "Add employee") {
         addEmployee();
       } else if (answer.menu === "Add department") {
@@ -51,6 +51,7 @@ function init() {
       updateEmployee();
     });
 }
+
 function viewEmployee() {
   connection.query(
     `SELECT first_name, last_name, title, salary
@@ -60,13 +61,38 @@ function viewEmployee() {
       if (err) throw err;
       console.table(results);
       init();
-      }
+    }
   );
 }
-function viewEmployeeDepartment() {
-    connection.query(
-      `SELECT * FROM department`, function(err, results){
-        if (err) throw err;
-        console.table(results);
-      }
-    )}
+
+function viewDepartment() {
+  connection.query(`SELECT * FROM department`, function (err, results) {
+    if (err) throw err;
+    console.table(results);
+    init();
+  });
+}
+
+function viewRole() {
+  connection.query(
+    `SELECT * FROM role;`,
+    function (err, results) {
+      if (err) throw err;
+      console.table(results);
+      init();
+    }
+  );
+}
+
+function addEmployee(){
+  console.log("addemployee");
+}
+function addDepartment(){
+  console.loog("addDepartment");
+}
+function addRole(){
+  console.log("addRole");
+}
+function updateEmployee(){
+  console.log("updateEmployee");
+}
