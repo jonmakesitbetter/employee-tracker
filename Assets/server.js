@@ -47,14 +47,15 @@ function init() {
         addDepartment();
       } else if (answer.menu === "Add role") {
         addRole();
-      } else answer.menu === "Update employee role";
-      updateEmployee();
+      }
+      // } else answer.menu === "Update employee role";
+      // updateEmployee();
     });
 }
 
 function viewEmployee() {
   connection.query(
-    `SELECT first_name, last_name, title, salary
+    `SELECT first_name, last_name, title, salary, manager_id
           FROM employee
           INNER JOIN role ON employee.role_id = role.id;`,
     function (err, results) {
@@ -66,7 +67,7 @@ function viewEmployee() {
 }
 
 function viewDepartment() {
-  connection.query(`SELECT * FROM department`, function (err, results) {
+  connection.query("SELECT * FROM department", function (err, results) {
     if (err) throw err;
     console.table(results);
     init();
@@ -75,7 +76,7 @@ function viewDepartment() {
 
 function viewRole() {
   connection.query(
-    `SELECT * FROM role;`,
+    "SELECT * FROM role;",
     function (err, results) {
       if (err) throw err;
       console.table(results);
@@ -85,7 +86,47 @@ function viewRole() {
 }
 
 function addEmployee(){
-  console.log("addemployee");
+  inquirer
+  .prompt([
+    {
+      name: "firstName",
+      message: "What is the employee's first name?",
+      type: "input"
+    },
+    {
+      name: "lastName",
+      message: "What is the employee's last name?",
+      type: "input"
+    },
+    {
+      name: "roleId",
+      message: "What is the employee's role id?",
+      type: "input"
+    },
+    {
+      name: "managerId",
+      message: "Please input the employee's manager id if they have one.",
+      type: "input"
+    }
+  ]).then(function(answer){
+    // INSERT INTO `employee_tracker_db`.`employee` (`first_name`, `last_name`, `role_id`, `manager_id`) VALUES ('ASDF', 'SADF', '3', '2');
+    connection.query(
+      "INSERT INTO employee SET ?",
+      {
+        first_name: answer.firstName,
+        last_name: answer.lastName,
+        role_id: answer.roleId,
+        manager_id: answer.managerId
+      },
+      function(err){
+        if (err) {
+          console.log("Error, try again.", err);
+          init();
+        };
+      }
+    )
+console.log(answer.firstName, answer.lastName, answer.roleId, answer.managerId);
+  });
 }
 function addDepartment(){
   console.loog("addDepartment");
@@ -93,44 +134,45 @@ function addDepartment(){
 function addRole(){
   console.log("addRole");
 }
-function updateEmployee(){
-  connection.query('SELECT * FROM employee', function (err, results) {
-    if (err) throw err;
-    let updatedEmployee = [];
-    for (var i = 0; i < results.length; i++) {
-      updatedEmployee.push(results[i].title);
-    }
-    inquirer
-      .prompt([
-        {
-          name: 'choice',
-          type: 'rawlist',
-          choices: updatedEmployee,
-          message: 'Which employee would you like to update?'
-        },
-        {
-          name: 'change',
-          type: 'input',
-          message: 'How much would you like to bid?'
-        }
-      ])
-      .then(function (answer) {
-        // get the information of the chosen item
-        var updatedEmployee;
-        for (var i = 0; i < results.length; i++) {
-          if (results[i].item_name === answer.choice) {
-            updatedEmployee = results[i];
-          }
-        }
 
-//         // determine if bid was high enough
-//         if (updatedEmployee.highest_bid < parseInt(answer.bid)) {
-//           // bid was high enough, so update db, let the user know, and start over
+// function updateEmployee(){
+//   connection.query("UPDATE employee SET title = ? WHERE id = ?", function (err, results) {
+//     if(err) throw err;
+    
+    
+//     // if (err) throw err;
+//     // let updatedEmployee = [];
+//     // for (var i = 0; i < results.length; i++) {
+//     //   updatedEmployee.push(results[i].title);
+//     }
+//     inquirer
+//       .prompt([
+//         {
+//           name: 'choice',
+//           type: 'rawlist',
+//           choices: updatedEmployee,
+//           message: 'Which employee would you like to update?'
+//         },
+//         {
+//           name: 'change',
+//           type: 'input',
+//           message: 'Please input your change.'
+//         }
+//       ])
+//       .then(function (answer) {
+//         // get the information of the chosen item
+//         var updatedEmployee;
+//         for (var i = 0; i < results.length; i++) {
+//           if (results[i].first_name === answer.choice) {
+//             updatedEmployee = results[i];
+//           }
+//         }
+
 //           connection.query(
 //             'UPDATE auctions SET ? WHERE ?',
 //             [
 //               {
-//                 highest_bid: answer.bid
+//                 first_name: answer.change
 //               },
 //               {
 //                 id: chosenItem.id
