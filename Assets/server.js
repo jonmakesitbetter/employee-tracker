@@ -106,7 +106,6 @@ function addEmployee() {
       },
     ])
     .then(function (answer) {
-      // INSERT INTO `employee_tracker_db`.`employee` (`first_name`, `last_name`, `role_id`, `manager_id`) VALUES ('ASDF', 'SADF', '3', '2');
       connection.query(
         "INSERT INTO employee SET ?",
         {
@@ -187,59 +186,78 @@ function addRole() {
     });
 };
 
-// function updateEmployee(){
-//   connection.query("UPDATE employee SET title = ? WHERE id = ?", function (err, results) {
-//     if(err) throw err;
-
-//     // if (err) throw err;
-//     // let updatedEmployee = [];
-//     // for (var i = 0; i < results.length; i++) {
-//     //   updatedEmployee.push(results[i].title);
-//     }
-//     inquirer
-//       .prompt([
-//         {
-//           name: 'choice',
-//           type: 'rawlist',
-//           choices: updatedEmployee,
-//           message: 'Which employee would you like to update?'
-//         },
-//         {
-//           name: 'change',
-//           type: 'input',
-//           message: 'Please input your change.'
-//         }
-//       ])
-//       .then(function (answer) {
-//         // get the information of the chosen item
-//         var updatedEmployee;
-//         for (var i = 0; i < results.length; i++) {
-//           if (results[i].first_name === answer.choice) {
-//             updatedEmployee = results[i];
-//           }
-//         }
-
-//           connection.query(
-//             'UPDATE auctions SET ? WHERE ?',
-//             [
-//               {
-//                 first_name: answer.change
-//               },
-//               {
-//                 id: chosenItem.id
-//               }
-//             ],
-//             function (error) {
-//               if (error) throw err;
-//               console.log('Bid placed successfully!');
-//               start();
-//             }
-//           );
-//         } else {
-//           // bid wasn't high enough, so apologize and start over
-//           console.log('Your bid was too low. Try again...');
-//           start();
-//         }
-//       });
-//   });
-// }
+function updateEmployee() {
+  connection.query('SELECT * FROM employee', function (err, results) {
+    if (err) throw err;
+    var employeeArray = [];
+    for (var i = 0; i < results.length; i++) {
+      employeeArray.push(results[i].last_name);
+    }
+    inquirer
+      .prompt([
+        {
+          name: 'choice',
+          type: 'rawlist',
+          choices: employeeArray,
+          message: 'What is the last name of the employee would you like to update?'
+        },
+        {
+          name: 'first_name',
+          type: 'input',
+          message: 'Please update their first name.'
+        },
+        {
+          name: 'last_name',
+          type: 'input',
+          message: 'Please update their last name,'
+        },
+        {
+          name: 'role_id',
+          type: 'input',
+          message: 'Please update their role id.'
+        },
+        {
+          name: 'manager_id',
+          type: 'input',
+          message: 'Please update their manager id.'
+        },
+      ])
+      .then(function (answer) {
+        var updatedEmployee;
+        for (var i = 0; i < results.length; i++) {
+          if (results[i].last_name === answer.choice) {
+            updatedEmployee = results[i].last_name;
+          }
+        }
+             connection.query(
+            'UPDATE auctions SET ? WHERE ?',
+            [
+              {
+                first_name: answer.first_name
+              },
+              {
+                id: updatedEmployee.id
+              },
+              {
+                last_name: answer.last_name
+              },
+              {
+                id: updatedEmployee.id
+              },
+              {
+                role_id: answer.role_id
+              },
+              {
+                id: updatedEmployee.id
+              },
+              {
+                manager_id: answer.manager_id
+              },
+              {
+                id: updatedEmployee.id
+              }
+            ],
+          );
+    });
+  });
+}
