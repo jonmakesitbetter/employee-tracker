@@ -42,8 +42,13 @@ INNER JOIN department ON role.department_id = department.id;
 
 SELECT first_name, last_name, title, salary, department_name
 FROM employee
-RIGHT JOIN role ON employee.role_id = role.id
-RIGHT JOIN department ON role.department_id = department.id;
+LEFT JOIN role ON employee.role_id = role.id
+LEFT JOIN department ON role.department_id = department.id;
+
+SELECT first_name, last_name, title, salary, department_name
+FROM employee
+INNER JOIN role ON employee.role_id = 1
+INNER JOIN department ON role.department_id = department.id;
 
 INSERT INTO department(department_name)
 VALUES("Accounting"), ("Engineering"), ("Sales");
@@ -52,7 +57,4 @@ INSERT INTO role(title, salary, department_id)
 VALUES("Auditor", 55000, 1), ("Accountant", 50000, 1), ("Senior Accountant", 85000, 1), ("Programmer", 999999, 2), ("Salesman", 72000, 3);
 
 INSERT INTO employee(first_name, last_name, role_id)
-VALUES("Sterence", "Bupkiss", 1), ("Bob", "Paar", 1), 
-("Bob", "Paar", 1), ("Bruce", "Wayne", 1), ("Biff", "Stevens", 2), 
-("Gor", "Urlag", 2), ("Harold", "Harolds", 2), ("Red", "Leader", 3), 
-("Bob", "Johnson", 3), ("Peter", "Parker", 3);
+VALUES("Sterence", "Bupkiss", 1), ("Bob", "Paar", 1), ("Bob", "Paar", 1), ("Bruce", "Wayne", 1), ("Biff", "Stevens", 2), ("Gor", "Urlag", 2), ("Harold", "Harolds", 2), ("Red", "Leader", 3), ("Bob", "Johnson", 3), ("Peter", "Parker", 3);

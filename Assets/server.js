@@ -26,29 +26,29 @@ function init() {
       message: "What would you like to do?",
       choices: [
         "View all employees",
-        "View employees by department",
-        "View employees by manager",
+        "View all departments",
+        "View all roles",
         "Add employee",
-        "Update employee role",
-        "Add role",
         "Add department",
-      ],
+        "Add role",
+        "Update employee role",
+        ],
     })
     .then(function (answer) {
       if (answer.menu === "View all employees") {
         viewEmployee();
-      } else if (answer.menu === "View employees by department") {
+      } else if (answer.menu === "View all departments") {
         viewEmployeeDepartment();
-      } else if (answer.menu === "View employees by manager") {
-        viewEmployeeManager();
+      } else if (answer.menu === "View all roles") {
+        viewEmployeeRole();
       } else if (answer.menu === "Add employee") {
         addEmployee();
-      } else if (answer.menu === "Update employee role") {
-        updateRole();
+      } else if (answer.menu === "Add department") {
+        addDepartment();
       } else if (answer.menu === "Add role") {
         addRole();
-      } else answer.menu === "Add department";
-      addDepartment();
+      } else answer.menu === "Update employee role";
+      updateEmployee();
     });
 }
 function viewEmployee() {
@@ -65,51 +65,8 @@ function viewEmployee() {
 }
 function viewEmployeeDepartment() {
     connection.query(
-        `SELECT department_name, first_name, last_name, title, salary
-        FROM employee
-        LEFT JOIN role ON employee.role_id = role.id
-        LEFT JOIN department ON role.department_id = department.id;`,
-        function (err, results) {
-            if (err) throw err;
-           inquirer
-           .prompt({
-             name: "departmentChoice",
-             type: "list",
-             message: "What department would you like to view?",
-             choices: [
-               "Accounting", 
-               "Engineering",
-               "Sales",
-               "Return"
-             ]
-           }).then(function(answer){
-            if (answer.departmentChoice === "Accounting") {
-              accounting();
-            } else if (answer.departmentChoice === "Engineering") {
-              engineering();
-            } else if (answer.departmentChoice === "Sales"){
-              sales();
-            } else {
-              init();
-            }
-           })
-           }
-    )
-}
-function accounting(){
-  connection.query(
-    `SELECT first_name, last_name, title, salary, department_name
-    FROM employee
-    LEFT JOIN role ON employee.role_id = role.id
-    LEFT JOIN department ON role.department_id = department.id;`, function(err, results){
-  if(err) throw err;
-  console.table(results);
-  init();
-}
-  )
-}
-function engineering(){
-  connection.query(
-
-  )
-}
+      `SELECT * FROM department`, function(err, results){
+        if (err) throw err;
+        console.table(results);
+      }
+    )}
