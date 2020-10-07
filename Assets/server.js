@@ -94,5 +94,59 @@ function addRole(){
   console.log("addRole");
 }
 function updateEmployee(){
-  console.log("updateEmployee");
-}
+  connection.query('SELECT * FROM employee', function (err, results) {
+    if (err) throw err;
+    let updatedEmployee = [];
+    for (var i = 0; i < results.length; i++) {
+      updatedEmployee.push(results[i].title);
+    }
+    inquirer
+      .prompt([
+        {
+          name: 'choice',
+          type: 'rawlist',
+          choices: updatedEmployee,
+          message: 'Which employee would you like to update?'
+        },
+        {
+          name: 'change',
+          type: 'input',
+          message: 'How much would you like to bid?'
+        }
+      ])
+      .then(function (answer) {
+        // get the information of the chosen item
+        var updatedEmployee;
+        for (var i = 0; i < results.length; i++) {
+          if (results[i].item_name === answer.choice) {
+            updatedEmployee = results[i];
+          }
+        }
+
+//         // determine if bid was high enough
+//         if (updatedEmployee.highest_bid < parseInt(answer.bid)) {
+//           // bid was high enough, so update db, let the user know, and start over
+//           connection.query(
+//             'UPDATE auctions SET ? WHERE ?',
+//             [
+//               {
+//                 highest_bid: answer.bid
+//               },
+//               {
+//                 id: chosenItem.id
+//               }
+//             ],
+//             function (error) {
+//               if (error) throw err;
+//               console.log('Bid placed successfully!');
+//               start();
+//             }
+//           );
+//         } else {
+//           // bid wasn't high enough, so apologize and start over
+//           console.log('Your bid was too low. Try again...');
+//           start();
+//         }
+//       });
+//   });
+// }
