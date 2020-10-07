@@ -47,9 +47,8 @@ function init() {
         addDepartment();
       } else if (answer.menu === "Add role") {
         addRole();
-      }
-      // } else answer.menu === "Update employee role";
-      // updateEmployee();
+      } else answer.menu === "Update employee role";
+        updateEmployee();
     });
 }
 
@@ -75,71 +74,123 @@ function viewDepartment() {
 }
 
 function viewRole() {
-  connection.query(
-    "SELECT * FROM role;",
-    function (err, results) {
-      if (err) throw err;
-      console.table(results);
-      init();
-    }
-  );
-}
-
-function addEmployee(){
-  inquirer
-  .prompt([
-    {
-      name: "firstName",
-      message: "What is the employee's first name?",
-      type: "input"
-    },
-    {
-      name: "lastName",
-      message: "What is the employee's last name?",
-      type: "input"
-    },
-    {
-      name: "roleId",
-      message: "What is the employee's role id?",
-      type: "input"
-    },
-    {
-      name: "managerId",
-      message: "Please input the employee's manager id if they have one.",
-      type: "input"
-    }
-  ]).then(function(answer){
-    // INSERT INTO `employee_tracker_db`.`employee` (`first_name`, `last_name`, `role_id`, `manager_id`) VALUES ('ASDF', 'SADF', '3', '2');
-    connection.query(
-      "INSERT INTO employee SET ?",
-      {
-        first_name: answer.firstName,
-        last_name: answer.lastName,
-        role_id: answer.roleId,
-        manager_id: answer.managerId
-      },
-      function(err){
-        if (err) {
-          console.log("Error, try again.", err);
-          init();
-        };
-      }
-    )
-console.log(answer.firstName, answer.lastName, answer.roleId, answer.managerId);
+  connection.query("SELECT * FROM role;", function (err, results) {
+    if (err) throw err;
+    console.table(results);
+    init();
   });
 }
-function addDepartment(){
-  console.loog("addDepartment");
-}
-function addRole(){
-  console.log("addRole");
-}
+
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        name: "firstName",
+        message: "What is the employee's first name?",
+        type: "input",
+      },
+      {
+        name: "lastName",
+        message: "What is the employee's last name?",
+        type: "input",
+      },
+      {
+        name: "roleId",
+        message: "What is the employee's role id?",
+        type: "input",
+      },
+      {
+        name: "managerId",
+        message: "Please input the employee's manager id if they have one.",
+        type: "input",
+      },
+    ])
+    .then(function (answer) {
+      // INSERT INTO `employee_tracker_db`.`employee` (`first_name`, `last_name`, `role_id`, `manager_id`) VALUES ('ASDF', 'SADF', '3', '2');
+      connection.query(
+        "INSERT INTO employee SET ?",
+        {
+          first_name: answer.firstName,
+          last_name: answer.lastName,
+          role_id: answer.roleId,
+          manager_id: answer.managerId,
+        },
+        function (err) {
+          if (err) {
+            console.log("Error, try again.", err);
+            return
+          }
+          init();
+        }
+      );
+    });
+};
+function addDepartment() {
+  inquirer
+    .prompt([
+      {
+        name: "department",
+        message: "What is the new department called?",
+        type: "input"
+      }
+    ])
+    .then(function (answer) {
+      connection.query(
+        "INSERT INTO department SET ?",
+        {
+          department: answer.department
+        },
+        function (err) {
+          if (err) {
+            console.log("Error, try again.", err);
+            init();
+          }
+        }
+      );
+    });
+};
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        name: "title",
+        message: "What is the new title?",
+        type: "input",
+      },
+      {
+        name: "salary",
+        message: "What is the new title's salary?",
+        type: "input",
+      },
+      {
+        name: "departmentId",
+        message: "What is the new title's department id?",
+        type: "input",
+      }
+    ])
+    .then(function (answer) {
+      connection.query(
+        "INSERT INTO role SET ?",
+        {
+          title: answer.title,
+          salary: answer.salary,
+          department_id: answer.departmentId
+        },
+        function (err) {
+          if (err) {
+            console.log("Error, try again.", err);
+            return
+          }
+          init();
+        }
+      );
+    });
+};
 
 // function updateEmployee(){
 //   connection.query("UPDATE employee SET title = ? WHERE id = ?", function (err, results) {
 //     if(err) throw err;
-    
-    
+
 //     // if (err) throw err;
 //     // let updatedEmployee = [];
 //     // for (var i = 0; i < results.length; i++) {
